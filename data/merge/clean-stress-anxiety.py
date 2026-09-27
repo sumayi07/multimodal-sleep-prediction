@@ -13,19 +13,21 @@ def process_ema_mood_for_sleep(
     Calculates average anxiety and stress scores for the period BEFORE each sleep session.
     Only counts surveys that occurred after the previous sleep ended, with a 24-hour maximum window.
     """
-    # Load and clean EMA data
+    # Load and clean raw Anxiety EMA data
     anxiety_df = pd.read_csv(anxiety_file)
     anxiety_df = anxiety_df[anxiety_df['Finished'] == 1]
+    # Convert ISO timestamp to UTC and remove timezone offset for clean comparison
     anxiety_df['datetime'] = pd.to_datetime(anxiety_df['start_ts'], utc=True).dt.tz_convert(None)
     
+    # Load and clean raw Stress EMA data
     stress_df = pd.read_csv(stress_file)
     stress_df = stress_df[stress_df['Finished'] == 1]
     stress_df['datetime'] = pd.to_datetime(stress_df['start_ts'], utc=True).dt.tz_convert(None)
     
-    # Load and process sleep data
+    # Load and process Sleep data
     sleep_df = pd.read_csv(sleep_file)
-    sleep_df['sleep_start'] = pd.to_datetime(sleep_df['startTime'])
-    sleep_df['sleep_end'] = pd.to_datetime(sleep_df['endTime'])
+    sleep_df['sleep_start'] = pd.to_datetime(sleep_df['startTime'], utc=True).dt.tz_convert(None)
+    sleep_df['sleep_end'] = pd.to_datetime(sleep_df['endTime'], utc=True).dt.tz_convert(None)
     sleep_df['sleep_date'] = pd.to_datetime(sleep_df['date']).dt.date
     
     # Sort sleep data chronologically by participant
@@ -95,3 +97,11 @@ def process_ema_mood_for_sleep(
         print(f"Sessions with both mood measures: {final_df[['pre_sleep_avg_anxiety', 'pre_sleep_avg_stress']].notna().all(axis=1).sum()}")
     
     return final_df
+
+# Run directly on your raw data files
+process_ema_mood_for_sleep(
+    anxiety_file='anxiety.csv', 
+    stress_file='stressd.csv', 
+    sleep_file='sleep_master.csv', 
+    output_file='pre_sleep_mood.csv'
+)
