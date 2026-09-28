@@ -10,6 +10,7 @@ This project attempts to determine what factor or combination of factors of exer
 ## Repository Structure
 * `data/` – Scripts used to process and clean data from the TILES-2018 dataset.
 * `models/` – Random Forest (RF) models used to evaluate cleaned data and evaluate their ability to predict sleep quality.
+* `results/` - Compares the performance of the RF models to the baseline models using root mean square error
 
 ## Technology Stack
 * **Language:** Python
