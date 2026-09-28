@@ -1,0 +1,3 @@
+* rmse.py: Merges Random Forest (results.csv) and baseline model outputs (rest_baseline_final.csv) into a single comparison file (rmse_data.csv).
+* percentage.py: Calculates the relative percentage improvement in RMSE over baseline for each target and predictor group, saving the results to improvement_data.csv
+* plots.py: Generates and saves the comparative performance line plot (improvement_comparison.png) using data from improvement_data.csv.   
